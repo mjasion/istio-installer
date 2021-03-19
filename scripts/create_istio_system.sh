@@ -25,11 +25,11 @@ fi
 versions=$(kubectl get --ignore-not-found=true deploy istiod -n $ISTIO_NAMESPACE -o=jsonpath='{$.spec.template.spec.containers[*].image}')
 if [[ $versions == "" ]]; then
   echo "running istioctl install"
-  istioctl install -i $ISTIO_NAMESPACE -y ${ISTIO_FILES[@]/#/-f }
+  istioctl install --manifests  /istio-${ISTIO_VERSION}/manifests -i $ISTIO_NAMESPACE -y ${ISTIO_FILES[@]/#/-f }
 
 else
   echo "running istioctl upgrade"
-  istioctl upgrade -i $ISTIO_NAMESPACE -y ${ISTIO_FILES[@]/#/-f }
+  istioctl upgrade --manifests /istio-${ISTIO_VERSION}/manifests -i $ISTIO_NAMESPACE -y ${ISTIO_FILES[@]/#/-f }
 fi
 
 if kubectl get namespace cattle-dashboards; then
